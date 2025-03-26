@@ -99,12 +99,13 @@ class TodosTest {
 
     @Test
     public void shouldFindSingleSimpleTaskWhenTitleMatches() {
-
         Todos todos = new Todos();
+
         SimpleTask targetTask = new SimpleTask(1, "Обновить документацию");
+
         todos.add(targetTask);
         todos.add(new Epic(2, new String[]{"Проверить стили", "Тестирование"}));
-
+        todos.add(new Meeting(3, "Планирование релиза", "Документация", "Завтра"));
 
         Task[] result = todos.search("документацию");
 
@@ -114,30 +115,32 @@ class TodosTest {
 
     @Test
     public void shouldFindSingleEpicWhenSubtaskMatches() {
-
         Todos todos = new Todos();
-        Epic targetEpic = new Epic(1, new String[]{"Интеграционное тестирование", "Нагрузочное тестирование"});
-        todos.add(targetEpic);
-        todos.add(new Meeting(2, "Планирование тестов", "QA", "Четверг"));
 
+        Epic targetEpic = new Epic(1, new String[]{"Интеграционное тестирование", "Нагрузочное тестирование"});
+
+        todos.add(targetEpic);
+        todos.add(new SimpleTask(2, "Подготовить тестовые данные"));
+        todos.add(new Meeting(3, "Обсуждение тестов", "Разработка", "Понедельник"));
 
         Task[] result = todos.search("Нагрузочное");
-
 
         Assertions.assertArrayEquals(new Task[]{targetEpic}, result);
     }
 
     @Test
     public void shouldFindSingleMeetingWhenProjectMatches() {
-
         Todos todos = new Todos();
-        Meeting targetMeeting = new Meeting(1, "Релиз", "Мобильное приложение", "Пятница");
-        todos.add(targetMeeting);
-        todos.add(new SimpleTask(2, "Подготовить релизные заметки"));
 
+
+        Meeting targetMeeting = new Meeting(1, "Релиз", "Мобильное приложение", "Пятница");
+
+
+        todos.add(targetMeeting);
+        todos.add(new SimpleTask(2, "Доработать мобильный интерфейс"));
+        todos.add(new Epic(3, new String[]{"Тест сервера", "Настройка сети"}));
 
         Task[] result = todos.search("Мобильное");
-
 
         Assertions.assertArrayEquals(new Task[]{targetMeeting}, result);
     }
